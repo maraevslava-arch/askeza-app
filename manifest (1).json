@@ -1,0 +1,26 @@
+{
+  "background_color": "#15140f",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Аскеза",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Аскеза",
+  "start_url": "/",
+  "theme_color": "#15140f",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;rect width='100' height='100' fill='%2315140F'/&gt;&lt;circle cx='50' cy='30' r='9' fill='%23B08D57'/&gt;&lt;circle cx='50' cy='55' r='9' fill='%23B08D57'/&gt;&lt;circle cx='50' cy='80' r='9' fill='none' stroke='%23B08D57' stroke-width='3'/&gt;&lt;line x1='50' y1='39' x2='50' y2='46' stroke='%23B08D57' stroke-width='3'/&gt;&lt;line x1='50' y1='64' x2='50' y2='71' stroke='%23B08D57' stroke-width='3'/&gt;&lt;/svg&gt;",
+      "isSquare": false,
+      "isPng": false,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    }
+  ],
+  "description": "Практика осознанного отказа: цель, отсчёт дней и мотивация",
+  "id": "ASKEZA-APP"
+}
