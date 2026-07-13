@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Аскеза</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2315140F'/%3E%3Ccircle cx='50' cy='30' r='9' fill='%23B08D57'/%3E%3Ccircle cx='50' cy='55' r='9' fill='%23B08D57'/%3E%3Ccircle cx='50' cy='80' r='9' fill='none' stroke='%23B08D57' stroke-width='3'/%3E%3Cline x1='50' y1='39' x2='50' y2='46' stroke='%23B08D57' stroke-width='3'/%3E%3Cline x1='50' y1='64' x2='50' y2='71' stroke='%23B08D57' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15140F;
+    --surface:#1E1C15;
+    --surface-2:#26241C;
+    --text:#EAE3D3;
+    --text-muted:#948C74;
+    --gold:#B08D57;
+    --gold-soft:#C9A876;
+    --red:#8B3A2B;
+    --border:#34311F;
+    --radius:18px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope',sans-serif;
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  h1,h2,h3,.serif{font-family:'PT Serif',serif;}
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    padding:28px 20px 20px;
+  }
+  /* ---------- header ---------- */
+  header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:22px;
+  }
+  header h1{
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    margin:0;
+  }
+  header .sub{
+    font-size:12px;
+    color:var(--text-muted);
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-top:2px;
+  }
+  /* ---------- quote ---------- */
+  .quote-box{
+    border:1px solid var(--border);
+    border-left:3px solid var(--gold);
+    background:var(--surface);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:22px;
+  }
+  .quote-box p{
+    font-family:'PT Serif',serif;
+    font-style:italic;
+    font-size:15px;
+    line-height:1.5;
+    margin:0;
+    color:var(--gold-soft);
+  }
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:none;
+    border-radius:12px;
+    padding:14px 18px;
+    font-family:'Manrope',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    width:100%;
+    transition:opacity .15s ease, transform .1s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--gold); color:#15140F;}
+  .btn-ghost{background:transparent; color:var(--text); border:1px solid var(--border);}
+  .btn-danger{background:transparent; color:var(--red); border:1px solid var(--red);}
+  .btn-sm{padding:10px 14px; font-size:13px; width:auto;}
+  .btn:disabled{opacity:.5; cursor:default;}
+  /* ---------- new practice fab ---------- */
+  .new-btn{
+    margin-bottom:26px;
+  }
+  /* ---------- list ---------- */
+  .practice-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:14px;
+    cursor:pointer;
+    transition:border-color .15s ease;
+  }
+  .practice-card:active{border-color:var(--gold);}
+  .practice-card .goal{
+    font-family:'PT Serif',serif;
+    font-size:18px;
+    line-height:1.3;
+    margin:0 0 4px;
+  }
+  .practice-card .renounce{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin:0 0 14px;
+  }
+  .card-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .day-badge{
+    font-family:'Manrope',sans-serif;
+    font-weight:800;
+    font-size:14px;
+    color:var(--gold-soft);
+  }
+  .status-tag{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    padding:3px 9px;
+    border-radius:20px;
+  }
+  .tag-active{background:rgba(176,141,87,.15); color:var(--gold-soft);}
+  .tag-completed{background:rgba(120,160,110,.15); color:#8FB08A;}
+  .tag-broken{background:rgba(139,58,43,.15); color:#C17A67;}
+  .empty{
+    text-align:center;
+    padding:50px 20px;
+    color:var(--text-muted);
+  }
+  .empty .glyph{font-size:36px; margin-bottom:10px; opacity:.7;}
+  .empty p{font-size:14px; line-height:1.6;}
+  /* ---------- thread / knots ---------- */
+  .thread-wrap{
+    display:flex;
+    justify-content:center;
+    margin:6px 0 4px;
+  }
+  /* ---------- detail view ---------- */
+  .back-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+    color:var(--text-muted);
+    font-size:13px;
+    cursor:pointer;
+  }
+  .detail-goal{
+    font-size:23px;
+    line-height:1.35;
+    margin:0 0 6px;
+  }
+  .detail-renounce{
+    font-size:13px;
+    color:var(--text-muted);
+    margin:0 0 26px;
+  }
+  .big-count{
+    text-align:center;
+    margin:6px 0 22px;
+  }
+  .big-count .num{
+    font-family:'PT Serif',serif;
+    font-size:64px;
+    line-height:1;
+    color:var(--gold);
+    display:block;
+  }
+  .big-count .label{
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin-top:6px;
+    display:block;
+  }
+  .action-row{display:flex; flex-direction:column; gap:10px; margin:22px 0 30px;}
+  .info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:26px;
+  }
+  .info-cell{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 14px;
+  }
+  .info-cell .k{font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;}
+  .info-cell .v{font-family:'PT Serif',serif; font-size:16px; margin-top:3px;}
+  .log-list{list-style:none; padding:0; margin:0; font-size:13px; color:var(--text-muted);}
+  .log-list li{padding:6px 0; border-bottom:1px solid var(--border);}
+  .log-list li:last-child{border-bottom:none;}
+  /* ---------- form ---------- */
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--text-muted);
+    margin-bottom:7px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--text);
+    font-family:'Manrope',sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+  }
+  .field textarea{resize:vertical; min-height:56px;}
+  .duration-row{display:flex; gap:8px;}
+  .duration-row .btn-sm{flex:1;}
+  .duration-row .btn-sm.active{background:var(--gold); color:#15140F; border-color:var(--gold);}
+  .backup-row{
+    display:flex;
+    gap:8px;
+    margin-top:30px;
+    padding-top:18px;
+    border-top:1px solid var(--border);
+  }
+  .backup-row .btn-sm{flex:1;}
+  .backup-hint{
+    font-size:11px;
+    color:var(--text-muted);
+    text-align:center;
+    margin-top:8px;
+    line-height:1.5;
+  }
+  .toast{
+    position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+    background:var(--surface-2); border:1px solid var(--border);
+    color:var(--text); padding:11px 18px; border-radius:30px;
+    font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s ease;
+    max-width:88%; text-align:center;
+  }
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- data ---------------- */
+const STORAGE_KEY = 'askeza_practices_v1';
+
+function loadPractices(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch(e){ return []; }
+}
+function savePractices(list){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+let practices = loadPractices();
+
+const QUOTES = [
+"Ограничение — не потеря, а место, откуда рождается сила.",
+"Каждый несделанный шаг в сторону соблазна — шаг к цели.",
+"Аскеза не наказывает тело — она обучает волю.",
+"Тот, кто умеет отказаться, умеет и выбирать.",
+"Дисциплина — это любовь к себе, выраженная в терпении.",
+"Не жди лёгкости. Жди ясности — она приходит через отказ.",
+"Пустота, оставленная привычкой, заполняется силой.",
+"Сила не в том, чтобы не хотеть, а в том, чтобы не поддаться.",
+"Каждый узелок на нити — это день, в который ты выбрал себя.",
+"Воздержание — это разговор с собой на языке действий.",
+"Тишина без лишнего — лучшая почва для роста.",
+"Ты не отказываешься от малого — ты освобождаешь место для большого.",
+"Путь аскезы короткий на словах и долгий на деле.",
+"Настоящая свобода начинается там, где заканчивается зависимость.",
+"Не считай дни в ожидании конца. Проживай каждый как цель.",
+"Слабость говорит громко только в первые дни — потом молчит.",
+"Отказ — это не про «нет». Это про то, чему ты говоришь «да».",
+"Терпение — валюта, которой оплачивается любое подлинное желание.",
+"Чем труднее держаться, тем яснее видно, ради чего.",
+"Аскеза учит: то, что легко бросить, легко и не получить.",
+"Не борись с желанием — наблюдай, как оно проходит.",
+"Каждый день без срыва — кирпич в фундаменте новой привычки.",
+"Ты не лишаешь себя. Ты выбираешь, кем стать.",
+"Дисциплина сегодня — это лёгкость завтра.",
+"Сорваться — не значит проиграть. Значит, начать заново мудрее.",
+"То, что даётся с трудом, ценится дольше всего.",
+"Практика без цели — просто лишение. Практика с целью — путь.",
+"Твоя воля крепче любой привычки — просто дай ей время.",
+"Не спеши к финалу. Финал строится из вот этого дня.",
+"Ясный ум — награда тому, кто умеет останавливать себя вовремя."
+];
+
+function quoteForToday(){
+  const d = new Date();
+  const seed = d.getFullYear()*372 + (d.getMonth()+1)*31 + d.getDate();
+  return QUOTES[seed % QUOTES.length];
+}
+
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fmtDate(iso){
+  const [y,m,d] = iso.split('-');
+  return d+'.'+m+'.'+y;
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ---------------- router ---------------- */
+let route = {view:'home'};
+
+function nav(r){ route = r; render(); window.scrollTo(0,0); }
+
+/* ---------------- thread / knots visual ---------------- */
+function renderThread(doneCount, target, size){
+  // size: 'sm' for card preview, 'lg' for detail
+  const isSm = size === 'sm';
+  const r = isSm ? 5 : 8;
+  const gap = isSm ? 16 : 26;
+  const perRow = isSm ? 14 : 9;
+  const total = target ? target : Math.max(doneCount, perRow);
+  const rows = Math.ceil(total / perRow);
+  const w = perRow*gap;
+  const h = rows*gap + 10;
+  let dots = '';
+  let lines = '';
+  for(let i=0;i<total;i++){
+    const row = Math.floor(i/perRow);
+    const col = i%perRow;
+    const x = col*gap + gap/2;
+    const y = row*gap + gap/2;
+    const filled = i < doneCount;
+    const isCurrent = i === doneCount && !target || (target && i === doneCount && doneCount < target);
+    if(i>0 && col>0){
+      const px = (col-1)*gap + gap/2;
+      const py = y;
+      lines += `<line x1="${px}" y1="${py}" x2="${x}" y2="${y}" stroke="${filled ? 'var(--gold)':'var(--border)'}" stroke-width="1.5"/>`;
+    }
+    dots += `<circle cx="${x}" cy="${y}" r="${r}" fill="${filled?'var(--gold)':'var(--surface)'}" stroke="${filled?'var(--gold)':'var(--border)'}" stroke-width="1.5" ${isCurrent?'stroke-dasharray="2,2" stroke="var(--gold-soft)"':''}/>`;
+  }
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${lines}${dots}</svg>`;
+}
+
+/* ---------------- computed helpers ---------------- */
+function doneCount(p){ return p.doneDates.length; }
+function isMarkedToday(p){ return p.doneDates.includes(todayISO()); }
+function statusLabel(p){
+  if(p.status==='completed') return {cls:'tag-completed', text:'Завершена'};
+  if(p.status==='broken') return {cls:'tag-broken', text:'Прервана'};
+  return {cls:'tag-active', text:'В процессе'};
+}
+
+/* ---------------- views ---------------- */
+function viewHome(){
+  const active = practices.filter(p=>p.status==='active');
+  const archive = practices.filter(p=>p.status!=='active');
+  let html = `
+    <header>
+      <div><h1>Аскеза</h1><div class="sub">Практика осознанного отказа</div></div>
+    </header>
+    <div class="quote-box"><p>«${quoteForToday()}»</p></div>
+    <button class="btn btn-primary new-btn" onclick="nav({view:'new'})">+ Начать новую аскезу</button>
+  `;
+  if(practices.length===0){
+    html += `
+      <div class="empty">
+        <div class="glyph">◈</div>
+        <p>Пока нет ни одной практики.<br>Определи цель и то, от чего готов отказаться ради неё — и начни отсчёт.</p>
+      </div>`;
+  } else {
+    if(active.length){
+      html += active.map(p=>cardHTML(p)).join('');
+    }
+    if(archive.length){
+      html += `<h3 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin:24px 0 10px;">Архив</h3>`;
+      html += archive.map(p=>cardHTML(p)).join('');
+    }
+  }
+  html += `
+    <div class="backup-row">
+      <button class="btn btn-ghost btn-sm" onclick="exportBackup()">⬇ Сохранить копию</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">⬆ Восстановить</button>
+    </div>
+    <input type="file" id="import-file" accept="application/json" style="display:none" onchange="importBackup(event)">
+    <p class="backup-hint">Данные хранятся прямо на устройстве. Сохраняй копию время от времени — на случай очистки браузера или переноса на новый телефон.</p>
+  `;
+  return html;
+}
+
+function cardHTML(p){
+  const dc = doneCount(p);
+  const st = statusLabel(p);
+  return `
+    <div class="practice-card" onclick="nav({view:'detail', id:'${p.id}'})">
+      <p class="goal">${escapeHtml(p.goal)}</p>
+      <p class="renounce">Отказ от: ${escapeHtml(p.renounce)}</p>
+      <div class="thread-wrap">${renderThread(dc, p.target, 'sm')}</div>
+      <div class="card-footer">
+        <span class="day-badge">День ${dc}${p.target ? ' из '+p.target : ''}</span>
+        <span class="status-tag ${st.cls}">${st.text}</span>
+      </div>
+    </div>`;
+}
+
+function viewNew(){
+  return `
+    <div class="back-row" onclick="nav({view:'home'})">← Назад</div>
+    <h2 class="serif" style="margin-bottom:22px;">Новая аскеза</h2>
+    <div class="field">
+      <label>Цель / желание</label>
+      <textarea id="f-goal" placeholder="Например: обрести ясность в делах и укрепить волю"></textarea>
+    </div>
+    <div class="field">
+      <label>От чего отказываешься</label>
+      <textarea id="f-renounce" placeholder="Например: сладкое, алкоголь, соцсети после 22:00"></textarea>
+    </div>
+    <div class="field">
+      <label>Длительность</label>
+      <div class="duration-row">
+        <button class="btn btn-ghost btn-sm dur-btn active" data-val="21" onclick="pickDuration(21,this)">21 день</button>
+        <button class="btn btn-ghost btn-sm dur-btn" data-val="40" onclick="pickDuration(40,this)">40 дней</button>
+        <button class="btn btn-ghost btn-sm dur-btn" data-val="0" onclick="pickDuration(0,this)">До цели</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="createPractice()">Начать отсчёт</button>
+  `;
+}
+let pendingDuration = 21;
+function pickDuration(v, el){
+  pendingDuration = v;
+  document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+function createPractice(){
+  const goal = document.getElementById('f-goal').value.trim();
+  const renounce = document.getElementById('f-renounce').value.trim();
+  if(!goal || !renounce){ showToast('Заполни цель и то, от чего отказываешься'); return; }
+  const p = {
+    id: uid(),
+    goal, renounce,
+    target: pendingDuration>0 ? pendingDuration : null,
+    startDate: todayISO(),
+    doneDates: [],
+    breaks: [],
+    status: 'active',
+    createdAt: Date.now()
+  };
+  practices.unshift(p);
+  savePractices(practices);
+  pendingDuration = 21;
+  nav({view:'detail', id:p.id});
+  showToast('Аскеза начата. Первый шаг — сегодня.');
+}
+
+function viewDetail(id){
+  const p = practices.find(x=>x.id===id);
+  if(!p) return `<div class="back-row" onclick="nav({view:'home'})">← Назад</div><p>Практика не найдена.</p>`;
+  const dc = doneCount(p);
+  const marked = isMarkedToday(p);
+  const st = statusLabel(p);
+  let html = `
+    <div class="back-row" onclick="nav({view:'home'})">← Назад</div>
+    <p class="detail-goal serif">${escapeHtml(p.goal)}</p>
+    <p class="detail-renounce">Отказ от: ${escapeHtml(p.renounce)} · <span class="status-tag ${st.cls}">${st.text}</span></p>
+    <div class="big-count">
+      <span class="num">${dc}</span>
+      <span class="label">${p.target ? 'день из '+p.target : 'день подряд'}</span>
+    </div>
+    <div class="thread-wrap">${renderThread(dc, p.target, 'lg')}</div>
+    <div class="info-grid">
+      <div class="info-cell"><div class="k">Начало</div><div class="v">${fmtDate(p.startDate)}</div></div>
+      <div class="info-cell"><div class="k">Срывов</div><div class="v">${p.breaks.length}</div></div>
+    </div>
+  `;
+  if(p.status==='active'){
+    html += `
+      <div class="action-row">
+        <button class="btn btn-primary" ${marked?'disabled':''} onclick="markToday('${p.id}')">
+          ${marked ? '✓ Сегодня уже отмечено' : 'Отметить сегодняшний день'}
+        </button>
+        <button class="btn btn-danger" onclick="breakPractice('${p.id}')">Не удержался — сорвался</button>
+      </div>`;
+  } else if(p.status==='completed'){
+    html += `<div class="quote-box"><p>Аскеза завершена — цель встречена дисциплиной. Это остаётся с тобой.</p></div>`;
+  } else {
+    html += `
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="restartPractice('${p.id}')">Начать заново</button>
+      </div>`;
+  }
+  if(p.breaks.length){
+    html += `<h3 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin:20px 0 8px;">История срывов</h3>
+      <ul class="log-list">${p.breaks.map(b=>`<li>${fmtDate(b.date)} — держался ${b.streak} дн.</li>`).join('')}</ul>`;
+  }
+  return html;
+}
+
+function markToday(id){
+  const p = practices.find(x=>x.id===id);
+  if(!p || isMarkedToday(p)) return;
+  p.doneDates.push(todayISO());
+  if(p.target && p.doneDates.length >= p.target){
+    p.status = 'completed';
+    showToast('Цель достигнута. Аскеза завершена.');
+  } else {
+    showToast('День отмечен.');
+  }
+  savePractices(practices);
+  render();
+}
+function breakPractice(id){
+  const p = practices.find(x=>x.id===id);
+  if(!p) return;
+  if(!confirm('Отметить срыв? Текущий отсчёт будет сохранён в историю и начнётся заново.')) return;
+  p.breaks.push({date: todayISO(), streak: p.doneDates.length});
+  p.doneDates = [];
+  p.startDate = todayISO();
+  p.status = 'active';
+  savePractices(practices);
+  render();
+  showToast('Ничего страшного. Начни заново — сегодня же.');
+}
+function restartPractice(id){
+  const p = practices.find(x=>x.id===id);
+  if(!p) return;
+  p.doneDates = [];
+  p.startDate = todayISO();
+  p.status = 'active';
+  savePractices(practices);
+  render();
+}
+
+function exportBackup(){
+  if(practices.length===0){ showToast('Пока нечего сохранять'); return; }
+  const data = JSON.stringify(practices, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date();
+  const stamp = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  a.href = url;
+  a.download = 'askeza-backup-'+stamp+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Копия сохранена в загрузки');
+}
+
+function importBackup(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const imported = JSON.parse(e.target.result);
+      if(!Array.isArray(imported)) throw new Error('bad format');
+      const replace = confirm('Заменить текущие данные восстановленной копией?\n\nОК — заменить всё.\nОтмена — добавить как новые записи, не удаляя текущие.');
+      if(replace){
+        practices = imported;
+      } else {
+        const existingIds = new Set(practices.map(p=>p.id));
+        imported.forEach(p=>{ if(!existingIds.has(p.id)) practices.push(p); });
+      }
+      savePractices(practices);
+      render();
+      showToast('Данные восстановлены');
+    }catch(err){
+      showToast('Не удалось прочитать файл резервной копии');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  if(route.view==='home') app.innerHTML = viewHome();
+  else if(route.view==='new') app.innerHTML = viewNew();
+  else if(route.view==='detail') app.innerHTML = viewDetail(route.id);
+}
+render();
+</script>
+</body>
+</html>
